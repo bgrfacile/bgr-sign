@@ -12,7 +12,7 @@ export default defineConfig({
     }
   },
   server: {
-    port: 5173, // Port par défaut de Vite
+    port: 5174, // Port par défaut de Vite
     // open: true,
     host: true, // '0.0.0.0' Écoute sur toutes les interfaces réseau
     watch: {
