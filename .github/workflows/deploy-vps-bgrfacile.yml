@@ -1,0 +1,39 @@
+name: Deploy to VPS bgrfacile
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Vérifie le dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Configure l'accès SSH
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # Copie les fichiers nécessaires sur le VPS
+      - name: Copy files to VPS
+        run: |
+          rsync -avz --delete \
+            --exclude '.git/' \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.DEPLOY_DIR }}
+
+      # Redémarre les conteneurs Docker sur le VPS
+      - name: Deploy with Docker Compose
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            cd ${{ secrets.DEPLOY_DIR }}
+#            docker compose pull
+            docker compose down
+            docker compose up --build --remove-orphans -d
+          EOF
