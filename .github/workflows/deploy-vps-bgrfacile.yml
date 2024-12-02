@@ -26,14 +26,14 @@ jobs:
           rsync -avz --delete \
             --exclude '.git/' \
             -e "ssh -o StrictHostKeyChecking=no" \
-            ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.DEPLOY_DIR }}
+            ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.DEPLOY_DIR }}/bgr-sign
 
       # Redémarre les conteneurs Docker sur le VPS
       - name: Deploy with Docker Compose
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
-            cd ${{ secrets.DEPLOY_DIR }}
-#            docker compose pull
+            cd ${{ secrets.DEPLOY_DIR }}/bgr-sign
+            docker compose pull
             docker compose down
             docker compose up --build --remove-orphans -d
           EOF
