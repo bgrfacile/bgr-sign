@@ -70,7 +70,7 @@ jobs:
             echo ${{ secrets.REGISTRY_PASSWORD }} | docker login registry.bgrfacile.com -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
             cd /srv/www/bgr-sign
             # Tenter d'arrêter et supprimer le container s'il existe déjà
-            # docker rm -f bgr-sign || true
+            docker rm -f bgr-sign || true
             # Redémarrer les services avec interruption minimale
             docker compose -f docker-compose-prod.yml down || true
             docker compose -f docker-compose-prod.yml up -d --pull always
