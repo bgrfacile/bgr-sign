@@ -74,16 +74,3 @@ jobs:
             # Redémarrer les services avec interruption minimale
             docker compose -f docker-compose-prod.yml down || true
             docker compose -f docker-compose-prod.yml up -d --pull always
-
-
-
-      - name: Clean up old Docker images
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
-          script: |
-            # Supprimer les images Docker non utilisées
-            docker image prune -a -f
