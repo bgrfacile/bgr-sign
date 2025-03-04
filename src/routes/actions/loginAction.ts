@@ -8,10 +8,16 @@ export async function loginAction({request}: { request: Request }) {
 
     try {
         // Authentification pour récupérer et stocker le token
-        await AuthService.login(email, password);
+        const {accessToken} = await AuthService.login(email, password);
         // Chargement des informations de l'utilisateur et stockage en localStorage
-        await AuthService.getUser();
-        return redirect("/dashboard");
+        if (accessToken) {
+            const data = await AuthService.getUser();
+            if (data) {
+                return redirect("/dashboard");
+            }
+        }
+
+        return redirect("/login");
     } catch (error: any) {
         console.error("Erreur lors de la connexion :", error);
         const errorMessage =

@@ -24,7 +24,7 @@ export const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({attendances
             </div>
             <div className="divide-y divide-gray-200">
                 {attendances.map((attendance) => (
-                    <div key={`${attendance.sessionId}-${attendance.userId}`} className="px-6 py-4">
+                    <div key={`${attendance.sessionId}-${attendance.studentId}`} className="px-6 py-4">
                         <div className="flex items-center justify-between">
                             <div>
                                 <h4 className="font-medium text-gray-900">{attendance.session.courseName}</h4>

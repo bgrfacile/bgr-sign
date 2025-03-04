@@ -1,0 +1,21 @@
+services:
+  bgr-sign:
+    image: registry.bgrfacile.com/bgr-sign:latest
+    container_name: bgr-sign
+#    build:
+#      context: .
+#    ports:
+#      - "3001:3001"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.bgr-sign.rule=Host(`${SUB_DOMAINE:-bgrsign.bgrfacile.com}`)
+      - traefik.http.routers.bgr-sign.entrypoints=websecure
+      - traefik.http.routers.bgr-sign.tls.certresolver=le
+      - traefik.http.services.bgr-sign.loadbalancer.server.port=3001
+    networks:
+      - traefik-network
+
+networks:
+  traefik-network:
+    external: true
+    name: traefik-network

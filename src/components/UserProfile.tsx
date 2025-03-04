@@ -1,8 +1,8 @@
 import { UserCircle, Mail, BookOpen } from 'lucide-react';
-import {User} from "@/types";
+import {UserProfileResponse} from "@/models/UserProfileResponse.ts";
 
 interface UserProfileProps {
-    user: User;
+    user: UserProfileResponse;
 }
 
 export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
@@ -12,15 +12,15 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                 {user.avatar ? (
                     <img
                         src={user.avatar}
-                        alt={user.name}
+                        alt={user.firstName}
                         className="w-16 h-16 rounded-full"
                     />
                 ) : (
                     <UserCircle className="w-16 h-16 text-gray-400" />
                 )}
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-900">{user.name}</h2>
-                    <p className="text-gray-600">{user.role}</p>
+                    <h2 className="text-xl font-semibold text-gray-900">{user.firstName}</h2>
+                    <p className="text-gray-600">{user.roles}</p>
                 </div>
             </div>
 

@@ -1,0 +1,1 @@
+export type UserRoleResponse = 'admin' | 'teacher' | 'student' | 'parent';
