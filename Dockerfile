@@ -6,8 +6,10 @@ RUN npm install
 
 # Définition des arguments et propagation en variables d'environnement
 ARG VITE_APP_TITLE
+ARG VITE_API_BASE_URL
 
 ENV VITE_APP_TITLE=$VITE_APP_TITLE
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 COPY . .
 
