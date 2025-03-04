@@ -46,7 +46,7 @@ export const SessionCard :FC<SessionCardProps> = ({ session, onMarkAttendance })
                 <Button
                     onClick={onMarkAttendance}
                     className="w-full"
-                    variant="primary"
+                    variant={'ghost'}
                 >
                     Marquer ma présence
                 </Button>

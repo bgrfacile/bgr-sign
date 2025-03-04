@@ -1,20 +1,26 @@
-# Utilise l'image officielle de Node.js comme base
-FROM node:20-alpine
-
-# Définit le répertoire de travail dans le conteneur
+# Étape 1 : Construire l'application
+FROM node:20-alpine AS builder
 WORKDIR /app
-
-# Copie les fichiers package.json et package-lock.json
 COPY package*.json ./
-
-# Installe les dépendances
 RUN npm install
 
-# Copie le reste du code de l'application
+# Définition des arguments et propagation en variables d'environnement
+ARG VITE_APP_TITLE
+
+ENV VITE_APP_TITLE=$VITE_APP_TITLE
+
 COPY . .
 
-# Expose le port sur lequel l'application sera accessible
-EXPOSE 5174
+# Supprimer le dossier dist s'il existe avant de construire
+RUN rm -rf dist
 
-# Commande pour démarrer l'application
-CMD ["npm", "run", "dev"]
+RUN npm run build
+
+# Étape 2 : Servir l'application avec Nginx
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 3001
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s \
+  CMD curl -f http://localhost:3001/ || exit 1
+CMD ["nginx", "-g", "daemon off;"]

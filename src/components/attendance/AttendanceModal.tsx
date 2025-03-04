@@ -32,8 +32,8 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
                         <p className="text-gray-600">{session.teacherName}</p>
                     </div>
                     <SignatureCanvas
-                        onSave={onConfirm}
-                        onCancel={onClose}
+                        onClose={onClose}
+                        onSubmit={onConfirm}
                     />
                 </div>
             </div>

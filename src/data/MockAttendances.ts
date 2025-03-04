@@ -1,5 +1,6 @@
-import {Attendance, Session} from "@/types";
+// import {Attendance, Session} from "@/types";
 
+/*
 export const MOCK_ATTENDANCES: (Attendance & { session: Session })[] = [
     {
         sessionId: '1',
@@ -31,4 +32,4 @@ export const MOCK_ATTENDANCES: (Attendance & { session: Session })[] = [
             status: 'completed',
         },
     },
-];
+];*/
