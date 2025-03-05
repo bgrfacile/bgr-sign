@@ -1,8 +1,8 @@
 import { redirect } from "react-router";
+import AuthService from "@/services/AuthService.ts";
 
 export async function loginLoader() {
-    const token = localStorage.getItem("token");
-    if (token) {
+    if (AuthService.isAuthenticated()) {
         return redirect("/");
     }
     return null;

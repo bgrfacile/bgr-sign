@@ -12,13 +12,18 @@ class AuthService {
     }
 
     logout(): void {
-        // Si besoin, vous pouvez ajouter une logique côté serveur ici
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
     }
 
     async getUser(): Promise<UserProfileResponse> {
         const response = await apiClient.get<ApiResponse<UserProfileResponse>>(API_ROUTES.ME);
         localStorage.setItem("user", JSON.stringify(response.data));
         return response.data;
+    }
+
+    isAuthenticated(): boolean {
+        return !!localStorage.getItem("token");
     }
 }
 

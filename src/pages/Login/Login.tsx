@@ -1,13 +1,31 @@
-import React from "react";
-import { useActionData, Form, useNavigation } from "react-router";
-import { LogIn } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/Button.tsx";
+import React, {useState} from "react";
+import {useNavigate} from "react-router";
+import {LogIn} from "lucide-react";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/Button.tsx";
+import {useChangeDocumentTitle} from "@/hooks/use-change-document-title.ts";
+import {useAuth} from "@/contexts/AuthContext.tsx";
 
 export const Login: React.FC = () => {
-    const actionData = useActionData() as { error?: string } | null;
-    const navigation = useNavigation();
-    const isLoading = navigation.state === "submitting";
+    useChangeDocumentTitle("Login");
+    const navigate = useNavigate();
+
+    const {login, isLoading} = useAuth();
+    const [error, setError] = useState<string | null>(null);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setError(null);
+        try {
+            await login(email, password);
+            navigate('/dashboard');
+        } catch (err: any) {
+            console.error('Login failed', error);
+            setError(err.message);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4">
@@ -22,8 +40,10 @@ export const Login: React.FC = () => {
                     <p className="mt-2 text-[#7F8C8D]">
                         Sign in to your Student Attendance Tracker account
                     </p>
-                    {actionData?.error && (
-                        <p className="mt-2 text-[#E74C3C]">{actionData.error}</p>
+                    {error && (
+                        <p className="mt-2 text-[#E74C3C]">
+                            {error}
+                        </p>
                     )}
                     <div className="mt-4 text-sm text-[#7F8C8D] space-y-1">
                         <p>Demo accounts (password: password):</p>
@@ -34,8 +54,7 @@ export const Login: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Utilisation du composant Form de react-router pour déléguer le traitement au routeur */}
-                <Form method="post" className="mt-8 space-y-6">
+                <form onSubmit={handleSubmit} className="mt-8 space-y-6">
                     <div className="space-y-4">
                         <Input
                             autoComplete="email"
@@ -45,6 +64,8 @@ export const Login: React.FC = () => {
                             required
                             placeholder="Enter your email"
                             disabled={isLoading}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                         <Input
                             autoComplete="current-password"
@@ -54,6 +75,8 @@ export const Login: React.FC = () => {
                             required
                             placeholder="Enter your password"
                             disabled={isLoading}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
@@ -63,7 +86,9 @@ export const Login: React.FC = () => {
                                 type="checkbox"
                                 className="h-4 w-4 text-[#1ABC9C] border-[#BDC3C7] rounded"
                             />
-                            <span className="ml-2 text-sm text-[#7F8C8D]">Remember me</span>
+                            <span className="ml-2 text-sm text-[#7F8C8D]">
+                Remember me
+              </span>
                         </label>
                         <a
                             href="#"
@@ -76,7 +101,7 @@ export const Login: React.FC = () => {
                     <Button type="submit" className="w-full" disabled={isLoading}>
                         {isLoading ? "Signing in..." : "Sign in"}
                     </Button>
-                </Form>
+                </form>
             </div>
         </div>
     );

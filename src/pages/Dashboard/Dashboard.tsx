@@ -2,13 +2,18 @@ import {FC} from 'react';
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {StudentDashboard} from "@/pages/Dashboard/StudentDashboard.tsx";
 import {TeacherDashboard} from "@/pages/Dashboard/TeacherDashboard.tsx";
+import {useChangeDocumentTitle} from "@/hooks/use-change-document-title.ts";
 
 
 export const Dashboard: FC = () => {
-    const {user} = useAuth();
+    useChangeDocumentTitle("Dashboard");
+    const {user, isLoading} = useAuth();
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     if (!user) {
-        return <div>Loading...</div>;
+        return <div>Aucun utilisateur connecté</div>;
     }
 
     // Détermination du rôle principal (priorité à 'student' puis 'teacher')

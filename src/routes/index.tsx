@@ -1,15 +1,14 @@
 import {createBrowserRouter, Navigate, NonIndexRouteObject} from "react-router";
 import {DefaultLayout} from "@/layouts/DefaultLayout.tsx";
 import {Login} from "@/pages/Login/Login.tsx";
-import {RoleBasedRoute} from "@/components/RoleBasedRoute.tsx";
 import {ClassDetailPage} from "@/pages/ClassDetailPage/ClassDetailPage.tsx";
 import {AttendancePage} from "@/pages/AttendancePage/AttendancePage.tsx";
 import {AttendanceDetailPage} from "@/pages/AttendanceDetailPage/AttendanceDetailPage.tsx";
 import {ReportsPage} from "@/pages/ReportsPage/ReportsPage.tsx";
 import SettingsPage from "@/pages/SettingsPage/SettingsPage";
 import {Dashboard} from "@/pages/Dashboard/Dashboard.tsx";
-import {loginAction} from "@/routes/actions/loginAction.ts";
 import {Error404} from "@/pages/Error404/Error404.tsx";
+import {LoaderLayout} from "@/routes/loaders/LoaderLayout.ts";
 import {loginLoader} from "@/routes/loaders/loginLoader.ts";
 
 const routesList: NonIndexRouteObject[] = [
@@ -17,6 +16,7 @@ const routesList: NonIndexRouteObject[] = [
         id: "main",
         path: "/",
         element: <DefaultLayout/>,
+        loader: LoaderLayout,
         children: [
             {
                 index: true,
@@ -24,46 +24,33 @@ const routesList: NonIndexRouteObject[] = [
             },
             {
                 path: "/dashboard",
-                element: (<RoleBasedRoute allowedRoles={['admin', 'teacher', 'student', 'parent']}>
-                    <Dashboard/>
-                </RoleBasedRoute>)
+                element: (<Dashboard/>)
             },
             {
                 path: "/class/:classId",
-                element: (<RoleBasedRoute allowedRoles={['admin', 'teacher']}>
-                    <ClassDetailPage/>
-                </RoleBasedRoute>)
+                element: (<ClassDetailPage/>)
             },
             {
                 path: "/attendance",
-                element: (<RoleBasedRoute allowedRoles={['admin', 'teacher', 'student']}>
-                    <AttendancePage/>
-                </RoleBasedRoute>)
+                element: (<AttendancePage/>)
             },
             {
                 path: "/attendance/:recordId",
-                element: (<RoleBasedRoute allowedRoles={['admin', 'teacher']}>
-                    <AttendanceDetailPage/>
-                </RoleBasedRoute>)
+                element: (<AttendanceDetailPage/>)
             },
             {
                 path: "/reports",
-                element: (<RoleBasedRoute allowedRoles={['admin', 'teacher']}>
-                    <ReportsPage/>
-                </RoleBasedRoute>)
+                element: (<ReportsPage/>)
             },
             {
                 path: "/settings",
-                element: (<RoleBasedRoute allowedRoles={['admin', 'teacher', 'student', 'parent']}>
-                    <SettingsPage/>
-                </RoleBasedRoute>)
+                element: (<SettingsPage/>)
             }
         ]
     },
     {
         path: "/login",
         element: <Login/>,
-        action: loginAction,
         loader: loginLoader,
     },
     {

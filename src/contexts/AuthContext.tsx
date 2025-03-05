@@ -2,28 +2,28 @@ import {createContext, FC, ReactNode, useContext, useEffect, useState} from "rea
 import AuthService from "@/services/AuthService";
 import {UserProfileResponse} from "@/models/UserProfileResponse.ts";
 
-type AuthContextType = {
+export interface AuthContextType {
     token: string | null;
     user: UserProfileResponse | null;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     isLoading: boolean;
-    fetchUser: (tokenParam?: string) => Promise<void>;
-};
+    refreshUser: () => Promise<void>;
+}
 
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({children}) => {
     const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<UserProfileResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchUser = async (tokenParam?: string) => {
-        const authToken = tokenParam || token;
-        if (!authToken) return;
+    const refreshUser = async () => {
+        if (!token) return;
         try {
             const userData = await AuthService.getUser();
             setUser(userData);
+            localStorage.setItem("user", JSON.stringify(userData));
         } catch (error) {
             console.error("Erreur lors de la récupération de l'utilisateur", error);
             logout();
@@ -34,7 +34,12 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({children}) => {
         try {
             const { accessToken } = await AuthService.login(email, password);
             setToken(accessToken);
-            await fetchUser(accessToken);
+            localStorage.setItem("token", accessToken);
+            const userData = await AuthService.getUser();
+            if (userData) {
+                setUser(userData)
+                localStorage.setItem("user", JSON.stringify(userData));
+            }
         } catch (error: any) {
             throw new Error(
                 error.response?.status === 401
@@ -47,46 +52,44 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({children}) => {
     const logout = () => {
         setToken(null);
         setUser(null);
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
         AuthService.logout();
     };
 
     useEffect(() => {
         const loadAuthData = async () => {
-            const savedToken = localStorage.getItem("token");
-            if (savedToken) {
-                const savedUser = localStorage.getItem("user");
-                if (savedUser) {
-                    setUser(JSON.parse(savedUser));
+            const storedToken = localStorage.getItem("token");
+            if (storedToken) {
+                setToken(storedToken);
+                // Si un utilisateur est sauvegardé, on peut le charger en attendant une éventuelle actualisation
+                const storedUser = localStorage.getItem("user");
+                if (storedUser) {
+                    setUser(JSON.parse(storedUser));
                 }
-                // setToken(savedToken);
-                // await fetchUser(savedToken);
-            } else {
-                const savedUser = localStorage.getItem("user");
-                if (savedUser) {
-                    setUser(JSON.parse(savedUser));
-                }
+                // Rafraîchir l'utilisateur pour s'assurer de la validité
+                await refreshUser();
             }
             setIsLoading(false);
         };
 
-        loadAuthData().finally(()=>{});
+        loadAuthData();
     }, []);
 
     return (
-        <AuthContext.Provider value={{token, user, login, logout, isLoading, fetchUser}}>
+        <AuthContext.Provider
+            value={{token, user, login, logout, isLoading, refreshUser}}
+        >
             {children}
         </AuthContext.Provider>
     );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
     const context = useContext(AuthContext);
-    if (!context) {
+    if (context === undefined) {
         throw new Error("useAuth must be used within an AuthProvider");
     }
-    return context;
+    return context as AuthContextType;
 };
+
 
 
