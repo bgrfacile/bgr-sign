@@ -29,6 +29,13 @@ class ApiClient {
         this.axiosInstance.interceptors.response.use(
             (response: AxiosResponse) => response,
             (error) => {
+                if (error.response && error.response.status === 401) {
+                    console.warn('Token invalide ou expiré. Redirection vers la page de connexion...');
+                    // Effacer le token stocké
+                    localStorage.removeItem('token');
+                    // Exemple de redirection vers la page de login
+                    window.location.href = '/login';
+                }
                 console.error('Erreur API:', error);
                 return Promise.reject(error);
             }
