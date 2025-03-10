@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {StudentDashboard} from "@/pages/Dashboard/StudentDashboard.tsx";
 import {TeacherDashboard} from "@/pages/Dashboard/TeacherDashboard.tsx";
-import {useChangeDocumentTitle} from "@/hooks/use-change-document-title.ts";
+import {useChangeDocumentTitle} from "@/hooks/useChangeDocumentTitle.ts";
 
 
 export const Dashboard: FC = () => {

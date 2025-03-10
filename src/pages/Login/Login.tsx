@@ -3,7 +3,7 @@ import {useNavigate} from "react-router";
 import {LogIn} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/Button.tsx";
-import {useChangeDocumentTitle} from "@/hooks/use-change-document-title.ts";
+import {useChangeDocumentTitle} from "@/hooks/useChangeDocumentTitle.ts";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 
 export const Login: React.FC = () => {

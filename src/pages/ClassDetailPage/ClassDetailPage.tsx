@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import {Mail, Clock, Check, X, ArrowLeft, Link} from 'lucide-react';
-import {useParams} from "react-router";
+import {Mail, Clock, Check, X, ArrowLeft} from 'lucide-react';
+import {Link, useParams} from "react-router";
 import {Button} from "@/components/ui/Button.tsx";
 
 
@@ -83,7 +83,7 @@ export const ClassDetailPage: React.FC = () => {
                             <h1 className="text-2xl font-bold text-[#2C3E50]">Mathematics 101</h1>
                             <p className="text-[#7F8C8D] mt-1">Room 301 • Monday, 9:00 AM</p>
                         </div>
-                        <Button>End Class</Button>
+                        {/*<Button>End Class</Button>*/}
                     </div>
                 </div>
 
