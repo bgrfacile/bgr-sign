@@ -1,10 +1,8 @@
 import React from 'react';
-import {
-    ChevronDown
-} from 'lucide-react';
-import { useNavigate } from 'react-router';
-import { Button } from '@/components/ui/Button';
-import { useTodaySessions } from '@/hooks/useTodaySessions';
+import {ChevronDown} from 'lucide-react';
+import {useNavigate} from 'react-router';
+import {Button} from '@/components/ui/Button';
+import {useTodaySessions} from '@/hooks/useTodaySessions';
 
 
 export const TeacherDashboard: React.FC = () => {
@@ -90,7 +88,7 @@ export const TeacherDashboard: React.FC = () => {
                                 <div
                                     key={index} // Si l'API fournit un id, utilisez-le ici
                                     className="flex items-center p-4 hover:bg-[#F8FAFC] rounded-lg transition-colors cursor-pointer"
-                                    onClick={() => navigate(`/class/${session.subjectName}`)} // Adaptez l'URL si besoin
+                                    onClick={() => navigate(`/course/${session.courseId}`)} // Adaptez l'URL si besoin
                                 >
                                     <div className="w-24">
                                         <span className="text-[#34495E] font-medium">{session.time}</span>

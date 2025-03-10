@@ -3,6 +3,7 @@ import {ApiResponse} from "@/models/ApiResponse.ts";
 import {API_ROUTES} from "@/constants/API_ROUTES.ts";
 
 export type SessionResponse = {
+    courseId: number,
     time: string,
     subjectName: string,
     presentCount: number,

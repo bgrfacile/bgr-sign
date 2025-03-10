@@ -27,7 +27,7 @@ const routesList: NonIndexRouteObject[] = [
                 element: (<Dashboard/>)
             },
             {
-                path: "/class/:classId",
+                path: "/course/:courseId",
                 element: (<ClassDetailPage/>)
             },
             {
