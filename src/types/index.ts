@@ -11,6 +11,14 @@ export type User = {
     subjects?: string[]; // For teachers
 }
 
+export type Student = {
+    userId: string;
+    name: string;
+    status: 'present' | 'absent' | 'late' | 'pending';
+    email: string;
+    avatar: string;
+}
+
 // export type AuthContextType = {
 //     user: User | null;
 //     login: (email: string, password: string) => Promise<void>;
