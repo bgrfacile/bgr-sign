@@ -13,9 +13,12 @@ export type User = {
 
 export type Student = {
     userId: string;
-    name: string;
-    status: 'present' | 'absent' | 'late' | 'pending';
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
     email: string;
+    profilePictureUrl: string | null;
+    status: 'present' | 'absent' | 'late' | 'pending';
     avatar: string;
 }
 

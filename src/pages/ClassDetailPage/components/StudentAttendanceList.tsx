@@ -1,5 +1,5 @@
 import React from 'react';
-import {Check, Clock, Mail, X} from 'lucide-react';
+import {Clock, Mail, X} from 'lucide-react';
 import {Button} from "@/components/ui/Button";
 import {getStatusColor} from "@/utils/utils";
 import {Student} from "@/types";
@@ -31,7 +31,7 @@ export const StudentAttendanceList: React.FC<Props> = (
                                     {student.avatar}
                                 </div>
                                 <div>
-                                    <h3 className="font-medium text-[#2C3E50]">{student.name}</h3>
+                                    <h3 className="font-medium text-[#2C3E50]">{student.firstName} {student.lastName}</h3>
                                     <p className="text-sm text-[#7F8C8D]">{student.email}</p>
                                 </div>
                             </div>
@@ -41,14 +41,15 @@ export const StudentAttendanceList: React.FC<Props> = (
                                     {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
                                 </span>
 
-                                <Button
+                                {/*visible que pour Admin*/}
+                                {/*<Button
                                     variant="secondary"
                                     size="sm"
                                     onClick={() => onUpdateStatus(student.userId, 'present')}
                                     className={student.status === 'present' ? 'bg-[#1ABC9C] text-white' : ''}
                                 >
                                     <Check className="h-4 w-4"/>
-                                </Button>
+                                </Button>*/}
 
                                 <Button
                                     variant="secondary"
