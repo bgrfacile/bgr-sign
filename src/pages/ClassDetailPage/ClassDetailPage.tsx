@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router";
 import { useFetchAttendanceInfo } from "@/hooks/useFetchAttendanceInfo.tsx";
 import { StudentAttendanceList } from "@/pages/ClassDetailPage/components/StudentAttendanceList.tsx";
 import { AttendanceQRCode } from "@/pages/ClassDetailPage/components/AttendanceQRCode";
+import { ClassStats } from "@/pages/ClassDetailPage/components/ClassStats";
 
 export const ClassDetailPage: React.FC = () => {
   const { courseId } = useParams();
@@ -39,48 +40,15 @@ export const ClassDetailPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* QR Code Section */}
             <div className="md:col-span-1">
-              {/* Utilisation du composant AttendanceQRCode */}
               <AttendanceQRCode qrCodeUrl={data?.qrCode || ""} />
 
               {/* Quick Stats */}
-              <div className="bg-white rounded-lg shadow-sm p-6 mt-6">
-                <h2 className="text-lg font-medium text-[#2C3E50] mb-4">
-                  Class Stats
-                </h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-lg bg-[#1ABC9C]/10 text-center">
-                    <div className="text-2xl font-bold text-[#1ABC9C]">
-                      {data?.stats.present}
-                    </div>
-                    <div className="text-sm text-[#2C3E50]">Present</div>
-                  </div>
-                  <div className="p-4 rounded-lg bg-[#E74C3C]/10 text-center">
-                    <div className="text-2xl font-bold text-[#E74C3C]">
-                      {data?.stats.absent}
-                    </div>
-                    <div className="text-sm text-[#2C3E50]">Absent</div>
-                  </div>
-                  <div className="p-4 rounded-lg bg-[#F1C40F]/10 text-center">
-                    <div className="text-2xl font-bold text-[#F1C40F]">
-                      {data?.stats.late}
-                    </div>
-                    <div className="text-sm text-[#2C3E50]">Late</div>
-                  </div>
-                  <div className="p-4 rounded-lg bg-[#7F8C8D]/10 text-center">
-                    <div className="text-2xl font-bold text-[#7F8C8D]">
-                      {data?.stats.pending}
-                    </div>
-                    <div className="text-sm text-[#2C3E50]">Pending</div>
-                  </div>
-                </div>
-              </div>
+              {data?.stats && <ClassStats stats={data.stats} />}
             </div>
 
             {/* Student List */}
             <div className="md:col-span-2">
-              <StudentAttendanceList
-                  students={data?.students}
-              />
+              <StudentAttendanceList students={data?.students} />
             </div>
           </div>
         </div>
