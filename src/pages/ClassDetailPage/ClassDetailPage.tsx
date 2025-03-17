@@ -1,16 +1,17 @@
 import React from "react";
-import {ArrowLeft} from "lucide-react";
-import {Link, useParams} from "react-router";
-import {useFetchAttendanceInfo} from "@/hooks/useFetchAttendanceInfo.tsx";
-import {StudentAttendanceList} from "@/pages/ClassDetailPage/components/StudentAttendanceList.tsx";
-
+import { ArrowLeft } from "lucide-react";
+import { Link, useParams } from "react-router";
+import { useFetchAttendanceInfo } from "@/hooks/useFetchAttendanceInfo.tsx";
+import { StudentAttendanceList } from "@/pages/ClassDetailPage/components/StudentAttendanceList.tsx";
+import { AttendanceQRCode } from "@/pages/ClassDetailPage/components/AttendanceQRCode";
 
 export const ClassDetailPage: React.FC = () => {
-  const {courseId} = useParams();
-  const {data, loading, error} = useFetchAttendanceInfo(Number(courseId));
+  const { courseId } = useParams();
+  const { data, loading, error } = useFetchAttendanceInfo(Number(courseId));
 
   if (loading) return <p>Chargement en cours...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
+
   return (
       <div className="min-h-screen bg-[#F8FAFC] pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -19,7 +20,7 @@ export const ClassDetailPage: React.FC = () => {
                 to="/dashboard"
                 className="inline-flex items-center text-[#7F8C8D] hover:text-[#2C3E50] mb-4"
             >
-              <ArrowLeft className="h-4 w-4 mr-2"/>
+              <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </Link>
 
@@ -38,22 +39,8 @@ export const ClassDetailPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* QR Code Section */}
             <div className="md:col-span-1">
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-medium text-[#2C3E50] mb-4">
-                  Attendance QR Code
-                </h2>
-                <div
-                    className="aspect-square bg-white p-4 rounded-lg border-2 border-[#ECF0F1] flex items-center justify-center">
-                  <img
-                      src={data?.qrCode}
-                      alt="Class QR Code"
-                      className="w-full h-full"
-                  />
-                </div>
-                <p className="text-sm text-[#7F8C8D] mt-4 text-center">
-                  Students can scan this QR code to mark their attendance
-                </p>
-              </div>
+              {/* Utilisation du composant AttendanceQRCode */}
+              <AttendanceQRCode qrCodeUrl={data?.qrCode || ""} />
 
               {/* Quick Stats */}
               <div className="bg-white rounded-lg shadow-sm p-6 mt-6">
@@ -89,15 +76,10 @@ export const ClassDetailPage: React.FC = () => {
               </div>
             </div>
 
-
             {/* Student List */}
             <div className="md:col-span-2">
               <StudentAttendanceList
-                  students={data?.students || null}
-                  onUpdateStatus={() => {
-                  }}
-                  onSendEmail={() => {
-                  }}
+                  students={data?.students}
               />
             </div>
           </div>

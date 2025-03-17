@@ -3,7 +3,7 @@ import AttendanceService from "@/services/AttendanceService.tsx";
 import {AttendanceInfoResponse} from "@/models/responses/AttendanceInfoResponse.ts";
 
 export const useFetchAttendanceInfo = (courseId: number | undefined) => {
-    const [data, setData] = useState<AttendanceInfoResponse | null>(null);
+    const [data, setData] = useState<AttendanceInfoResponse>({} as AttendanceInfoResponse);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +21,7 @@ export const useFetchAttendanceInfo = (courseId: number | undefined) => {
             }
         };
 
-        fetchAttendanceInfo();
+        fetchAttendanceInfo().then(r => r);
     }, [courseId]);
 
     return { data, loading, error };
