@@ -1,15 +1,18 @@
-import React, {useCallback} from 'react';
-import {Clock, Mail, X} from 'lucide-react';
+import React, {useCallback, useState} from 'react';
+import {Clock, Mail, X} from 'lucide-react'; // Importez Checkbox
 import {Button} from "@/components/ui/Button";
 import {getStatusColor} from "@/utils/utils";
 import {Student} from "@/types";
 import {StudentAvatar} from "@/pages/ClassDetailPage/components/StudentAvatar.tsx";
+import { Checkbox } from "@/components/ui/checkbox"
+
 
 interface Props {
     students: Student[];
 }
 
 export const StudentAttendanceList: React.FC<Props> = ({students}) => {
+    const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
 
     // Fonctions locales pour simuler la mise à jour du statut et l'envoi d'un email
     const handleUpdateStatus = useCallback((studentId: string, newStatus: Student['status']) => {
@@ -22,10 +25,34 @@ export const StudentAttendanceList: React.FC<Props> = ({students}) => {
         // Ici, vous pouvez simuler l'ouverture d'un formulaire de contact ou autre
     }, []);
 
+    const handleCheckboxChange = (studentId: string) => {
+        setSelectedStudents((prevSelected) => {
+            if (prevSelected.includes(studentId)) {
+                return prevSelected.filter((id) => id !== studentId);
+            } else {
+                return [...prevSelected, studentId];
+            }
+        });
+    };
+    const handleSendGroupEmail = () => {
+        selectedStudents.forEach((studentId) => {
+            const student = students.find((s) => s.userId === studentId);
+            if (student) {
+                handleSendEmail(student.email);
+            }
+        });
+        setSelectedStudents([]); // Réinitialiser la sélection après l'action
+    };
+
     return (
         <div className="bg-white rounded-lg shadow-sm">
             <div className="p-6 border-b border-[#ECF0F1]">
                 <h2 className="text-lg font-medium text-[#2C3E50]">Student Attendance</h2>
+                {selectedStudents.length > 0 && (
+                    <Button onClick={handleSendGroupEmail}>
+                        Send Group Email ({selectedStudents.length})
+                    </Button>
+                )}
             </div>
             <div className="p-6">
                 <div className="space-y-4">
@@ -35,6 +62,10 @@ export const StudentAttendanceList: React.FC<Props> = ({students}) => {
                             className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-lg"
                         >
                             <div className="flex items-center space-x-4">
+                                <Checkbox
+                                    checked={selectedStudents.includes(student.userId)}
+                                    onCheckedChange={() => handleCheckboxChange(student.userId)}
+                                />
                                 <StudentAvatar
                                     profilePictureUrl={student.profilePictureUrl}
                                     firstName={student.firstName}
@@ -49,9 +80,9 @@ export const StudentAttendanceList: React.FC<Props> = ({students}) => {
                             </div>
 
                             <div className="flex items-center space-x-2">
-                <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(student.status)}`}>
-                  {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
-                </span>
+                                <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(student.status)}`}>
+                                    {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
+                                </span>
                                 <Button
                                     variant="secondary"
                                     size="sm"
